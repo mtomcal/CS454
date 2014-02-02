@@ -21,7 +21,7 @@ mkdir -p $out
 mkdir -p $tmp
 
 # Run Command Below
-SOAPdenovo-127mer all -s /home14/mstreis/in/soap/config/soap_config_A_2.txt -K 45 -R -F -N 300000000 -o /tmp/mtomcal 1>A_k33_2.log 2>A_k33_2.err.log
+SOAPdenovo-127mer all -s /home14/mstreis/in/soap/config/soap_config_A_2.txt -K 45 -R -F -N 300000000 -o $tmp/soap 1>A_k33_2.log 2>A_k33_2.err.log
 
 # copy data from scratch (or tmp) directory back to home directory for long term storage:
 /bin/cp -a $tmp/* $out
