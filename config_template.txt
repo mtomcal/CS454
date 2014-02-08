@@ -1,0 +1,47 @@
+#maximal read length
+max_rd_len=101
+[LIB]
+#average insert size
+avg_ins=450
+#if sequence needs to be reversed
+reverse_seq=0
+#in which part(s) the reads are used
+asm_flags=3
+rd_len_cutoff=120
+#in which order the reads are used while scaffolding
+rank=1
+pair_num_cutoff=%(pair_num_cutoff)s
+map_len=%(map_len)s
+#fastq file for read 1
+q1=/home14/mstreis/in/PE_A/PE_fil_R1.fastq
+q2=/home14/mstreis/in/PE_A/PE_fil_R2.fastq
+[LIB]
+avg_ins=4250
+reverse_seq=1
+asm_flags=2
+rd_len_cutoff=120
+rank=2
+pair_num_cutoff=%(pair_num_cutoff)s
+map_len=%(map_len)s
+q1=/home14/mstreis/in/mate_pair-112613/prc_sr_out_ACAGTG/ACAGTG_R1.fastq
+q2=/home14/mstreis/in/mate_pair-112613/prc_sr_out_ACAGTG/ACAGTG_R2.fastq
+[LIB]
+avg_ins=6000
+reverse_seq=1
+asm_flags=2
+rd_len_cutoff=120
+rank=3
+pair_num_cutoff=%(pair_num_cutoff)s
+map_len=%(map_len)s
+q1=/home14/mstreis/in/mate_pair-112613/prc_sr_out_GCCAAT/GCCAAT_R1.fastq
+q2=/home14/mstreis/in/mate_pair-112613/prc_sr_out_GCCAAT/GCCAAT_R2.fastq
+[LIB]
+avg_ins=10000
+reverse_seq=1
+asm_flags=2
+rd_len_cutoff=120
+rank=4
+pair_num_cutoff=%(pair_num_cutoff)s
+map_len=%(map_len)s
+q1=/home14/mstreis/in/mate_pair-112613/prc_sr_out_ATGTCA/ATGTCA_R1.fastq
+q2=/home14/mstreis/in/mate_pair-112613/prc_sr_out_ATGTCA/ATGTCA_R2.fastq

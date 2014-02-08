@@ -1,0 +1,34 @@
+#!/bin/bash
+##Lines commented with a ## indicate lines needing to be edited to match your directories.
+
+#PBS -N name
+#PBS -o /home7/stein2/logs				##
+#PBS -e /home7/stein2/logs				##
+#PBS -d /home7/stein2/logs				##
+#PBS -m ae
+#PBS -M stein2@uoregon.edu				##
+#PBS -l nodes='1':ppn='12'
+#PBS -q fatnodes
+
+dir=/home7/stein2						##
+out=$dir/Bioinformatics/out				##
+tmp=/tmp/stein2							##
+
+source $dir/.bash_profile
+
+# Make output folder
+mkdir -p $out
+
+# Make tmp folder
+mkdir -p $tmp
+
+
+# Run Command Below
+module load load soapdenovo/2.04
+SOAPdenovo-127mer all -s $dir/Bioinformatics/config/%(config)s -d %(kmerFreqCutoff)s -K %(kmerLength)s -R -F -N 300000000 -o /tmp/stein2/soap 1>$out/A_k33_2.log 2>$out/A_k33_2.err.log ##
+
+# copy data from scratch (or tmp) directory back to home directory for long term storage:
+/bin/cp -a $tmp/* $out
+
+# clean up after ourselves so others can utilize scratch:
+/bin/rm -rf $tmp
