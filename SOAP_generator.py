@@ -75,9 +75,14 @@ def outputScript(pair_num_cutoff, map_len,kmerFreqCutoff, kmerLength):
 	
 	#Needs name of config file
 	configName = 'config_%d_%d.txt' % (pair_num_cutoff, map_len)
+	#Output folder
+	outFolder = 'Results_%d_%d_%d_%d' % (pair_num_cutoff, map_len, kmerFreqCutoff, kmerLength)
 	#Create new file
 	scriptFile = open('soap_%d_%d_%d_%d.sh' % (pair_num_cutoff, map_len,kmerFreqCutoff, kmerLength), 'w+')
-	scriptFile.write(scriptTemplate % {'kmerFreqCutoff':str(kmerFreqCutoff), 'kmerLength':str(kmerLength), 'config':configName})
+	scriptFile.write(scriptTemplate % {'kmerFreqCutoff':str(kmerFreqCutoff), 
+	                                   'kmerLength':str(kmerLength), 
+	                                   'config':configName, 
+	                                   'out':outFolder})
 	scriptFile.close()
 
 
@@ -151,10 +156,10 @@ def generateScripts(pairNums, map_lens, freqCutoffs, kmerLens):
 if __name__ == "__main__":
 		
 	#EDIT THESE VALUES IN ORDER TO GENERATE YOUR SCRIPTS
-	pairNums	= [10,20,40]
-	map_lens	= [34]
-	freqCutoffs = [23, 40]
-	kmerLens	= [14, 30]
+	pairNums	= [10,25,60]	#Min number of times paired/matched
+	map_lens	= [15, 45]		#Minimum overlap amount
+	freqCutoffs = [23, 40]		#Maximum kmer frequency cap
+	kmerLens	= [20, 80]		#Kmer length
 
 	print 'Starting up script...'
 	generateScripts(pairNums, map_lens, freqCutoffs, kmerLens)

@@ -15,8 +15,9 @@
 #PBS -q fatnodes
 ##
 dir=/home7/stein2
+
 ##
-out=$dir/Bioinformatics/out
+out=$dir/Bioinformatics/out/%(out)s
 ##
 tmp=/tmp/stein2
 
