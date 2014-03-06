@@ -1,23 +1,23 @@
 """ScaffDense
 
 Usage:
-    scaffdense.py validate <scaffold> <blastdb> --threads=<threads> [--e-value=<value>] [--pbs]
+    scaffdense.py validate <scaffold> <blastdb> --threads=<threads> [--e-value=<value>]
 """
 
 import os
 import operator
 import tempfile
 import csv
-from multiprocessing import Pool
+from multiprocessing import Pool, Manager
 from docopt import docopt
 from Bio import SeqIO
 from Bio.Blast import NCBIXML
-from plumbum.cmd import perl, grep, augustus, blastp, rm
+from plumbum.cmd import perl, grep, augustus, tblastn, rm
 
 
 TEMPDIR = None
 SCAFFOLDS = None
-RESULTS = list()
+RESULTS = Manager().list()
 
 def open_tmp(filename, flags):
     global TEMPDIR
@@ -95,14 +95,17 @@ def run_parallel(threads, database, evalue="1e-10"):
 
     blast_arguments = list()
     for scaff in SCAFFOLDS:
-        blast_arguments.append((scaff, database, evalue))
+        blast_arguments.append({'filename': scaff, 'database': database, 'evalue': evalue})
     pool.map(run_blast, blast_arguments)
 
 def run_fetch_prot_seq(filename):
     pipeline = perl['getAnnoFasta.pl', tmp_path(filename + '.aug')]
     pipeline()
 
-def run_blast(filename, database, evalue="1e-10"):
+def run_blast(params):
+    database = params['database']
+    evalue = params['evalue']
+    filename = params['filename']
     pipeline = tblastn['-db', database, '-query',
                       tmp_path(filename + '.aug.aa'), '-out',
                       tmp_path(filename + '.xml'),
@@ -144,8 +147,9 @@ if __name__ == '__main__':
         filename = get_filename(arguments['<scaffold>'])
         threads = int(arguments['--threads'])
         database = arguments['<blastdb>']
-        print tmp_path('file')
+        evalue = arguments['--evalue']
         convert_single_line(filename)
         get_top_n_scaffs(filename)
-        run_parallel(threads, database)
+        run_parallel(threads, database, evalue=evalue)
         write_results_csv(arguments['<scaffold>'])
+        del_tmp()
