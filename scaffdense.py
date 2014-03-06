@@ -147,7 +147,7 @@ if __name__ == '__main__':
         filename = get_filename(arguments['<scaffold>'])
         threads = int(arguments['--threads'])
         database = arguments['<blastdb>']
-        evalue = arguments['--evalue']
+        evalue = arguments['--e-value']
         convert_single_line(filename)
         get_top_n_scaffs(filename)
         run_parallel(threads, database, evalue=evalue)
