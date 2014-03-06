@@ -7,14 +7,17 @@ Usage:
 import os
 import operator
 import tempfile
+import csv
 from multiprocessing import Pool
 from docopt import docopt
 from Bio import SeqIO
+from Bio.Blast import NCBIXML
 from plumbum.cmd import perl, grep, augustus, blastp, rm
 
 
 TEMPDIR = None
 SCAFFOLDS = None
+RESULTS = list()
 
 def open_tmp(filename, flags):
     global TEMPDIR
@@ -99,15 +102,40 @@ def run_fetch_prot_seq(filename):
     pipeline = perl['getAnnoFasta.pl', tmp_path(filename + '.aug')]
     pipeline()
 
-
 def run_blast(filename, database, evalue="1e-10"):
-    pipeline = blastp['-db', database, '-query',
+    pipeline = tblastn['-db', database, '-query',
                       tmp_path(filename + '.aug.aa'), '-out',
                       tmp_path(filename + '.xml'),
                       '-outfmt', 5,
                       '-evalue', evalue]
     pipeline()
+    count_scaffold_hits(filename)
 
+def count_scaffold_hits(filename):
+    global RESULTS
+    scaf_count = dict()
+    handle = open(tmp_path(filename + '.xml'), 'r')
+    blast_records = list(NCBIXML.parse(handle))
+    handle.close()
+    for record in blast_records:
+        for desc in record.descriptions:
+            scaffold = str(desc).split(" ")[1]
+            if scaffold not in scaf_count:
+                scaf_count[scaffold] = 1
+            else:
+                scaf_count[scaffold] += 1
+    total_hits = sum(scaf_count.values())
+    best_hit_scaf_key = max(scaf_count, key=scaf_count.get)
+    best_hit_scaf_count = scaf_count[best_hit_scaf_key]
+    RESULTS.append((filename, best_hit_scaf_key, best_hit_scaf_count, total_hits, float(best_hit_scaf_count) / float(total_hits)))
+
+def write_results_csv(filename):
+    global RESULTS
+    with open(filename + '.csv', 'w') as out:
+        file_writer = csv.writer(out)
+        file_writer.writerow(['scaffold', 'best_hit_scaffold', 'best_hit_scaffold_count', 'total_hits', 'p'])
+        for fields in RESULTS:
+            file_writer.writerow([f for f in fields])
 
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='0.0.1')
@@ -120,3 +148,4 @@ if __name__ == '__main__':
         convert_single_line(filename)
         get_top_n_scaffs(filename)
         run_parallel(threads, database)
+        write_results_csv(arguments['<scaffold>'])
