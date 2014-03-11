@@ -15,6 +15,6 @@ module load python/2.7.6
 module load augustus/2.7
 module load blast
 
-pip install -r --user scaffdense_requirements.txt
+pip install -r scaffdense_requirements.txt --user
 
 python scaffdense.py <scaffold> <blastdb> --threads=10
