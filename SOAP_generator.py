@@ -1,5 +1,5 @@
 import os
-
+import re
 #SOAP file generator
 #Alexander Stein 2014, CIS 454: Bioinformatics, University of Oregon
 #
@@ -76,14 +76,15 @@ def outputScript(pair_num_cutoff, map_len,kmerFreqCutoff, kmerLength):
 	
 
 	
-	#Needs name of config file
-	configName = 'config_%s_%s.txt' % (str(pair_num_cutoff), str(map_len))
-	#Output folder
-	outFolder = 'Results_%s_%s_%d_%d' % (str(pair_num_cutoff), str(map_len), kmerFreqCutoff, kmerLength)
-	#Create new file
-	scriptFile = open('soap_%s_%s_%d_%d.sh' % (str(pair_num_cutoff), str(map_len),kmerFreqCutoff, kmerLength), 'w+')
-	scriptFile.write(scriptTemplate % {'kmerFreqCutoff':str(kmerFreqCutoff), 
-	                                   'kmerLength':str(kmerLength), 
+	#Needs name of config file and sanitize
+	configName = sanitize('config_%s_%s.txt' % (str(pair_num_cutoff), str(map_len)))
+	#Output folder and sanitize
+	outFolder = sanitize('Results_%s_%s_%d_%d' % (str(pair_num_cutoff), str(map_len), kmerFreqCutoff, kmerLength))
+	#Create new file and sanitize name
+	filename = sanitize('soap_%s_%s_%d_%d.sh' % (str(pair_num_cutoff), str(map_len),kmerFreqCutoff, kmerLength))
+	scriptFile = open(filename, 'w+')
+	scriptFile.write(scriptTemplate % {'kmerFreqCutoff':sanitize(str(kmerFreqCutoff)), 
+	                                   'kmerLength':sanitize(str(kmerLength)), 
 	                                   'config':configName, 
 	                                   'out':outFolder})
 	scriptFile.close()
@@ -110,8 +111,9 @@ def outputConfig(pair_num_cutoff, map_len):
 	else:
 		print ("Generating config with pair_num_cutoff = " + str(pair_num_cutoff) + " and map_len = " + str(map_len))
 	
-	#Create new file
-	configFile = open('config_%s_%s.txt' % (str(pair_num_cutoff), str(map_len)), 'w+')
+	#Create new file and sanitize for shell
+	filename = 'config_%s_%s.txt' % (str(pair_num_cutoff), str(map_len))
+	configFile = open(sanitize(filename), 'w+')
 	try:
 		#Tuple detected
 		configFile.write(configTemplate % {'pair_num_cutoff_PE':str(pair_num_cutoff[0]),'map_len_PE':str(map_len[0]),
@@ -162,7 +164,13 @@ def generateScripts(pairNums, map_lens, freqCutoffs, kmerLens):
 				for l in kmerLens:
 					outputScript(i, j,k,l)
 
-
+def sanitize(toClean):
+	'''
+	Utility used to clean names up for Unix
+	'''
+	toClean = re.sub('[,]','-', toClean)
+	toClean = re.sub('[() ]','', toClean)
+	return toClean
 ######################################################
 #						MAIN						 #
 ######################################################
