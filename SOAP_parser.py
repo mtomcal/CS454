@@ -103,11 +103,13 @@ class SOAPParser:
 			attributes['scaffolds'] = self.fetchAttribute(errLog,'Scaffold number')
 			attributes['longestScaffold'] = self.fetchAttribute(errLog,'Longest scaffold')
 			attributes['scaffoldsAndSingletons'] = self.fetchAttribute(errLog,'Scaffold and singleton number')
-		except:
+		except IOError:
 			print 'Error: "A_k33_2.err.log" not found'
+		except IndexError:
+			print 'Error: Malformed/incomplete file... Skipping'
 		try:
 			#Open scafStats
-			scaffStat = open('out.scafStatistics','r').read()
+			scaffStat = open('soap.scafStatistics','r').read()
 			#Parse the scafStatistics file
 			attributes['contigs'] = self.fetchAttribute(scaffStat,'Contig_Num')
 			attributes['sizeWithN'] = self.fetchAttribute(scaffStat,'Size_includeN',False)
@@ -120,8 +122,10 @@ class SOAPParser:
 			attributes['scaffoldsOver500'] = self.fetchAttribute(scaffStat,'scaffolds>500')
 			attributes['singletons'] = self.fetchAttribute(scaffStat,'Singleton_Num')
 			attributes['percentScaffolds'] = str(float(attributes['scaffolds'])/float(attributes['singletons']))
-		except:
+		except IOError:
 			print 'Error "out.scafStatistics" not found'
+		except IndexError:
+			print 'Error: Malformed/incomplete file... Skipping'
 		#Go back out of folder
 		os.chdir('..')
 		self.outputResult(attributes)
