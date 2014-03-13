@@ -24,9 +24,12 @@ import os
 #
 #	(int) pair_num_cutoff:
 #		Minimum amount of times a sequence of base pairs can overlap before two contigs
-#		can be joined.
+#		can be joined. May contain tuples for differentiated
+#		mate pair and paired end values. Paired end is first element, mate pair, second.
 #	(int) map_len:
-#		The minimum length of the overlapping sequences of bases. Minimum value is 5.
+#		The minimum length of the overlapping sequences of bases. Minimum value is 5. May contain 
+#		tuples for differentiated mate pair and paired end values. Paired end is first 
+#		element, mate pair, second.
 #	(int) kmerFreqCutoff:
 #		Maximum frequency that kmers may appear before being cut off.
 #	(int) kmerLength:
@@ -74,11 +77,11 @@ def outputScript(pair_num_cutoff, map_len,kmerFreqCutoff, kmerLength):
 
 	
 	#Needs name of config file
-	configName = 'config_%d_%d.txt' % (pair_num_cutoff, map_len)
+	configName = 'config_%s_%s.txt' % (str(pair_num_cutoff), str(map_len))
 	#Output folder
-	outFolder = 'Results_%d_%d_%d_%d' % (pair_num_cutoff, map_len, kmerFreqCutoff, kmerLength)
+	outFolder = 'Results_%s_%s_%d_%d' % (str(pair_num_cutoff), str(map_len), kmerFreqCutoff, kmerLength)
 	#Create new file
-	scriptFile = open('soap_%d_%d_%d_%d.sh' % (pair_num_cutoff, map_len,kmerFreqCutoff, kmerLength), 'w+')
+	scriptFile = open('soap_%s_%s_%d_%d.sh' % (str(pair_num_cutoff), str(map_len),kmerFreqCutoff, kmerLength), 'w+')
 	scriptFile.write(scriptTemplate % {'kmerFreqCutoff':str(kmerFreqCutoff), 
 	                                   'kmerLength':str(kmerLength), 
 	                                   'config':configName, 
@@ -110,9 +113,15 @@ def outputConfig(pair_num_cutoff, map_len):
 	#Create new file
 	configFile = open('config_%s_%s.txt' % (str(pair_num_cutoff), str(map_len)), 'w+')
 	try:
-		configFile.write(configTemplate % {'pair_num_cutoff':str(pair_num_cutoff), 'map_len':str(map_len)})
+		#Tuple detected
+		configFile.write(configTemplate % {'pair_num_cutoff_PE':str(pair_num_cutoff[0]),'map_len_PE':str(map_len[0]),
+		                                   'pair_num_cutoff_MP':str(pair_num_cutoff[1]),'map_len_MP':str(map_len[1])})
 	except:
-		configFile.close()
+		#No Tuple
+		configFile.write(configTemplate % {'pair_num_cutoff_PE':str(pair_num_cutoff),'map_len_PE':str(map_len),
+		                                   'pair_num_cutoff_MP':str(pair_num_cutoff),'map_len_MP':str(map_len)})
+		pass
+	configFile.close()
 
 def generateScripts(pairNums, map_lens, freqCutoffs, kmerLens):
 	'''
@@ -120,9 +129,11 @@ def generateScripts(pairNums, map_lens, freqCutoffs, kmerLens):
 		Runs through all of the lists, generating scripts with each of the parameter permutations.
 	args:
 		(int list) pairNums:
-			List of pair_num_cutoff values.
+			List of pair_num_cutoff values. May contain tuples for differentiated
+			mate pair and paired end values. Paired end is first element, mate pair, second.
 		(int list) map_lens:
-			List of map_len values.
+			List of map_len values. May contain tuples for differentiated
+			mate pair and paired end values. Paired end is first element, mate pair, second.
 		(int list) freqCutoffs:
 			List of kmerFreqCutoff values.
 		(int list) kmerLens:
@@ -160,9 +171,9 @@ if __name__ == "__main__":
 		
 	#EDIT THESE VALUES IN ORDER TO GENERATE YOUR SCRIPTS
 	#40_34_23_30
-	pairNums	= [5,7]		#Min number of times paired/matched
-	map_lens	= [31,35]	#Minimum overlap amount
+	pairNums	= [(5,7),(7,11)]		#Min number of times paired/matched
+	map_lens	= [(31,33),(35,37)]	#Minimum overlap amount
 	freqCutoffs = [0]		#Maximum kmer frequency cap
-	kmerLens	= [45,53,61]		#Kmer length
+	kmerLens	= [49,55,63]		#Kmer length
 	print 'Starting up script...'
 	generateScripts(pairNums, map_lens, freqCutoffs, kmerLens)

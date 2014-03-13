@@ -10,8 +10,8 @@ asm_flags=3
 rd_len_cutoff=120
 #in which order the reads are used while scaffolding
 rank=1
-pair_num_cutoff=%(pair_num_cutoff)s
-map_len=%(map_len)s
+pair_num_cutoff=%(pair_num_cutoff_PE)s
+map_len=%(map_len_PE)s
 #fastq file for read 1
 q1=/home14/mstreis/in/PE_A/PE_fil_R1.fastq
 q2=/home14/mstreis/in/PE_A/PE_fil_R2.fastq
@@ -21,8 +21,8 @@ reverse_seq=1
 asm_flags=2
 rd_len_cutoff=120
 rank=2
-pair_num_cutoff=%(pair_num_cutoff)s
-map_len=%(map_len)s
+pair_num_cutoff=%(pair_num_cutoff_MP)s
+map_len=%(map_len_MP)s
 q1=/home14/mstreis/in/mate_pair-112613/prc_sr_out_ACAGTG/ACAGTG_R1.fastq
 q2=/home14/mstreis/in/mate_pair-112613/prc_sr_out_ACAGTG/ACAGTG_R2.fastq
 [LIB]
@@ -31,8 +31,8 @@ reverse_seq=1
 asm_flags=2
 rd_len_cutoff=120
 rank=3
-pair_num_cutoff=%(pair_num_cutoff)s
-map_len=%(map_len)s
+pair_num_cutoff=%(pair_num_cutoff_MP)s
+map_len=%(map_len_MP)s
 q1=/home14/mstreis/in/mate_pair-112613/prc_sr_out_GCCAAT/GCCAAT_R1.fastq
 q2=/home14/mstreis/in/mate_pair-112613/prc_sr_out_GCCAAT/GCCAAT_R2.fastq
 [LIB]
@@ -41,7 +41,7 @@ reverse_seq=1
 asm_flags=2
 rd_len_cutoff=120
 rank=4
-pair_num_cutoff=%(pair_num_cutoff)s
-map_len=%(map_len)s
+pair_num_cutoff=%(pair_num_cutoff_MP)s
+map_len=%(map_len_MP)s
 q1=/home14/mstreis/in/mate_pair-112613/prc_sr_out_ATGTCA/ATGTCA_R1.fastq
 q2=/home14/mstreis/in/mate_pair-112613/prc_sr_out_ATGTCA/ATGTCA_R2.fastq
