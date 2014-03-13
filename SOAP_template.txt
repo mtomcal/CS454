@@ -31,7 +31,7 @@ mkdir -p $tmp
 
 
 # Run Command Below
-module load load soapdenovo/2.04
+module load soapdenovo/2.04
 ##
 SOAPdenovo-127mer all -s $dir/Bioinformatics/config/%(config)s -d %(kmerFreqCutoff)s -K %(kmerLength)s -R -F -N 300000000 -o /tmp/stein2/soap 1>$out/A_k33_2.log 2>$out/A_k33_2.err.log
 

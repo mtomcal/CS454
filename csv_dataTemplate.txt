@@ -1,0 +1,1 @@
+%(contigs)s,%(kmerFreqCutoff)s,%(kmerLength)s,%(longestScaffold)s,%(map_len)s,%(n)s,%(N50)s,%(N90)s,%(pair_num_cutoff)s,%(percentScaffolds)s,%(scaffolds)s,%(singletons)s,%(scaffoldsAndSingletons)s,%(scaffoldsOver100K)s,%(scaffoldsOver10K)s,%(scaffoldsOver1K)s,%(scaffoldsOver1M)s,%(scaffoldsOver500)s,%(sizeWithN)s,%(sizeWithoutN)s

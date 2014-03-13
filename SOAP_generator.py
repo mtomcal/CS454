@@ -93,7 +93,8 @@ def outputConfig(pair_num_cutoff, map_len):
 	args:
 		(int) pair_num_cutoff:
 			Minimum amount of times a sequence of base pairs can overlap before two contigs
-			can be joined.
+			can be joined. If given 2-plet, the first will go to the paired-end library 
+			and the 2nd will go to the mate pair.
 		(int) map_len:
 			The minimum length of the overlapping sequences of bases. Minimum value is 5.
 	return:
@@ -107,9 +108,11 @@ def outputConfig(pair_num_cutoff, map_len):
 		print ("Generating config with pair_num_cutoff = " + str(pair_num_cutoff) + " and map_len = " + str(map_len))
 	
 	#Create new file
-	configFile = open('config_%d_%d.txt' % (pair_num_cutoff, map_len), 'w+')
-	configFile.write(configTemplate % {'pair_num_cutoff':str(pair_num_cutoff), 'map_len':str(map_len)})
-	configFile.close()
+	configFile = open('config_%s_%s.txt' % (str(pair_num_cutoff), str(map_len)), 'w+')
+	try:
+		configFile.write(configTemplate % {'pair_num_cutoff':str(pair_num_cutoff), 'map_len':str(map_len)})
+	except:
+		configFile.close()
 
 def generateScripts(pairNums, map_lens, freqCutoffs, kmerLens):
 	'''
@@ -156,10 +159,10 @@ def generateScripts(pairNums, map_lens, freqCutoffs, kmerLens):
 if __name__ == "__main__":
 		
 	#EDIT THESE VALUES IN ORDER TO GENERATE YOUR SCRIPTS
-	pairNums	= [10,25,60]	#Min number of times paired/matched
-	map_lens	= [15, 45]		#Minimum overlap amount
-	freqCutoffs = [23, 40]		#Maximum kmer frequency cap
-	kmerLens	= [20, 80]		#Kmer length
-
+	#40_34_23_30
+	pairNums	= [5,7]		#Min number of times paired/matched
+	map_lens	= [31,35]	#Minimum overlap amount
+	freqCutoffs = [0]		#Maximum kmer frequency cap
+	kmerLens	= [45,53,61]		#Kmer length
 	print 'Starting up script...'
 	generateScripts(pairNums, map_lens, freqCutoffs, kmerLens)

@@ -1,0 +1,12 @@
+=================================================
+pair_num_cutoff:%(pair_num_cutoff)s
+map_len:%(map_len)s
+kmerFreqCutoff:%(kmerFreqCutoff)s
+kmerLength:%(kmerLength)s
+---
+Contigs:%(contigs)s
+Longest Scaffold:%(longestScaffold)s
+Ns:%(n)s
+Scaffolds:%(scaffolds)s
+N50:%(N50)s
+N90:%(N90)s
